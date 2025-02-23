@@ -18,6 +18,8 @@ const renderTabs = (props) => {
     `;
 
     document.addEventListener('click', (e) => {
+        const container = e.target.closest('.tab-container');
+        if (!container) return;
         if (e.target.classList.contains('tab-btn')) {
             // Add event listeners to tab buttons
             const button = e.target;
