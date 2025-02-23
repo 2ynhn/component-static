@@ -6,33 +6,39 @@
     <title>Document</title>
     <style>
         .head {height: 56px; background-color: burlywood;}
-        .bar {background-color: blueviolet;}
-        .total {color: antiquewhite;}
-        .total::before {content: '/';}
-        .current {font-weight: 700;color: #fff;}
     </style>
     <script src="./js/component.js"></script>
 </head>
 
 <body>
     <header class="head">title</header>
-    <script>
-        const t = 5;
-        const c = 3;
-        componentStaticInit('./component/step.js', 
-            { total : t, current : c }
-        );
-
-    </script>
+    
     <div class="wrap">
         <script>
             componentStaticInit('./component/tab.js', 
-                { tabs: ["탭 1", "탭 2", "탭 3"] }
+                { 
+                    css : './component/tab.css',
+                    tabs: ["탭 1", "탭 2", "탭 3"]
+
+                 }
             );
         </script>
 
         <div class="contents">
-            contents
+            contents <br><br>
+
+            <script>
+                const t = 5;
+                const c = 3;
+                componentStaticInit('./component/step.js', 
+                    {
+                        css : './component/step.css',
+                        total : t, 
+                        current : c 
+                    }
+                );
+        
+            </script>
         </div>
     </div>
 </body>

@@ -1,6 +1,8 @@
 const renderStep = (props) => {
     stepHtml = `
+        <link rel="stylesheet" href="${props.css}" media="print" onload="this.media='all'">
         <div class="step">
+            <p>Your State is...</p>
             <div class="bar">
                 <span class="current">${props.current}</span>
                 <span class="total">${props.total}</span>

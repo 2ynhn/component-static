@@ -1,0 +1,4 @@
+.total {color: antiquewhite;}
+.total::before {content: '/';}
+.bar {background-color: blueviolet;}
+.current {font-weight: 700;color: #fff;}
