@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .head {height: 56px; background-color: burlywood;}
+        .bar {background-color: blueviolet;}
+        .total {color: antiquewhite;}
+        .total::before {content: '/';}
+        .current {font-weight: 700;color: #fff;}
+    </style>
+    <script src="./js/component.js"></script>
+</head>
+
+<body>
+    <header class="head">title</header>
+    <script>
+        const t = 5;
+        const c = 3;
+        componentStaticInit(document.currentScript, 
+        './component/step.js', 
+        { total : t, current : c }
+    );
+
+    </script>
+    <div class="wrap">
+        <script>
+            componentStaticInit(document.currentScript, 
+            './component/tab.js', 
+            { tabs: ["탭 1", "탭 2", "탭 3"] }
+        );
+        </script>
+
+        <div class="contents">
+            contents
+        </div>
+    </div>
+</body>
+</html>
