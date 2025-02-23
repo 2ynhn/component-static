@@ -6,7 +6,6 @@ const renderStep = (props) => {
                 <span class="total">${props.total}</span>
             </div>
         </div>
-        
     `;
 
     const current = document.querySelector('.current');

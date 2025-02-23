@@ -1,4 +1,5 @@
-function componentStaticInit(scriptElement, componentUrl, props = {}, callback = null) {
+function componentStaticInit(componentUrl, props = {}, callback = null) {
+    const scriptElement = document.currentScript;
     function loadScript(url, callback) {
         fetch(url)
             .then(response => response.text())

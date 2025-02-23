@@ -19,18 +19,16 @@
     <script>
         const t = 5;
         const c = 3;
-        componentStaticInit(document.currentScript, 
-        './component/step.js', 
-        { total : t, current : c }
-    );
+        componentStaticInit('./component/step.js', 
+            { total : t, current : c }
+        );
 
     </script>
     <div class="wrap">
         <script>
-            componentStaticInit(document.currentScript, 
-            './component/tab.js', 
-            { tabs: ["탭 1", "탭 2", "탭 3"] }
-        );
+            componentStaticInit('./component/tab.js', 
+                { tabs: ["탭 1", "탭 2", "탭 3"] }
+            );
         </script>
 
         <div class="contents">
