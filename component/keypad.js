@@ -7,7 +7,8 @@ const renderKeypad = (props) => {
     // 기본 설정값 정의
     const defaults = {
         selector: '.number-input',
-        commaFormat: true
+        commaFormat: true,
+        amountBtns: [] // 기본 금액 버튼 값
     };
     
     // props와 기본값 병합
@@ -16,11 +17,11 @@ const renderKeypad = (props) => {
     // HTML 템플릿 생성
     const keypadHtml = `
         <div class="custom-keypad" id="customKeypad">
+            ${options.amountBtns && options.amountBtns.length > 0 ? `
             <div class="keypad-row amount-buttons">
-                <div class="key amount-btn">+1,000</div>
-                <div class="key amount-btn">+5,000</div>
-                <div class="key amount-btn">+10,000</div>
+                ${options.amountBtns.map(amount => `<div class="key amount-btn">+${amount.toLocaleString()}</div>`).join('')}
             </div>
+            ` : ''}
             <div class="keypad-row">
                 <div class="key">1</div>
                 <div class="key">2</div>
@@ -132,6 +133,62 @@ const renderKeypad = (props) => {
         
         // 입력 필드에 포맷팅된 값 설정
         input.value = formattedValue;
+        
+        // 최소/최대 금액 검증
+        validateAmountRange(input);
+    }
+    
+    /**
+     * 최소/최대 금액 범위 검증
+     * @param {HTMLInputElement} input - 검증할 입력 필드
+     */
+    function validateAmountRange(input) {
+        // 이전 caution 메시지 제거
+        const prevCautionText = input.parentNode.querySelector('.caution-text');
+        if (prevCautionText) {
+            prevCautionText.remove();
+        }
+        
+        // 입력값이 비어있는 경우 검증 생략
+        if (!input.value) {
+            input.classList.remove('caution');
+            return;
+        }
+        
+        // 최소/최대 금액 속성 확인
+        const minAmount = input.dataset.min ? parseInt(input.dataset.min) : null;
+        const maxAmount = input.dataset.max ? parseInt(input.dataset.max) : null;
+        
+        // 최소/최대 금액이 설정되지 않은 경우 검증 생략
+        if (minAmount === null && maxAmount === null) {
+            input.classList.remove('caution');
+            return;
+        }
+        
+        // 현재 입력값 (콤마 제거)
+        const currentValue = parseInt(input.value.replace(/,/g, ''));
+        
+        // 오류 메시지
+        let cautionMessage = null;
+        
+        // 최소/최대 금액 범위 검증
+        if (minAmount !== null && currentValue < minAmount) {
+            cautionMessage = `최소 금액은 ${minAmount.toLocaleString()}원 입니다.`;
+            input.classList.add('caution');
+        } else if (maxAmount !== null && currentValue > maxAmount) {
+            cautionMessage = `최대 금액은 ${maxAmount.toLocaleString()}원 입니다.`;
+            input.classList.add('caution');
+        } else {
+            input.classList.remove('caution');
+        }
+        
+        // 오류 메시지 표시
+        if (cautionMessage) {
+            const cautionElement = document.createElement('div');
+            cautionElement.className = 'caution-text';
+            cautionElement.textContent = cautionMessage;
+            input.parentNode.appendChild(cautionElement);
+        }
     }
     
     /**
@@ -185,6 +242,10 @@ const renderKeypad = (props) => {
                     // 완료 키 처리
                     customKeypad.style.display = 'none';
                     activeInput.readOnly = false;
+                    
+                    // 최종 값에 대한 금액 범위 검증
+                    validateAmountRange(activeInput);
+                    
                     activeInput.blur();
                     activeInput = null;
                 } else if (!key.classList.contains('amount-btn')) {
@@ -232,6 +293,9 @@ const renderKeypad = (props) => {
                 if (options.commaFormat || activeInput.dataset.format === 'comma') {
                     formatNumberWithComma(activeInput);
                 }
+                
+                // 금액 범위 검증
+                validateAmountRange(activeInput);
             });
         });
     }
