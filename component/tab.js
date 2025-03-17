@@ -1,6 +1,6 @@
 const renderTabs = (props) => {
     const tabsHtml = `
-        <link rel="stylesheet" href="${props.css}" media="print" onload="this.media='all'">
+        <link rel="stylesheet" href="${props.css}">
         <div class="tab-container">
             <div class="tab-buttons">
                 ${props.tabs.map((tab, index) => `
