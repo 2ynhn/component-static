@@ -34,7 +34,7 @@ function componentStaticInit(componentUrl, props = {}, callback = null) {
             }
 
             // ✅ scriptElement 삭제 (이중 실행 방지)
-            scriptElement.remove();
+            // scriptElement.remove();
 
             if (callback) callback();
         } catch (err) {
