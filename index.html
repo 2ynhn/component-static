@@ -7,7 +7,7 @@
     <style>
         .head {height: 56px; background-color: burlywood;}
     </style>
-    <script src="./js/component.js"></script>
+    <script src="./js/component.js?v=1"></script>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     
     <div class="wrap">
         <script>
-            componentStaticInit('./component/tab.js', 
+            const tab = componentStaticRender('./component/tab.js', 
                 { 
                     css : './component/tab.css',
                     tabs: ["탭 1", "탭 2", "탭 3"]
@@ -27,13 +27,11 @@
             contents <br><br>
 
             <script>
-                const t = 5;
-                const c = 3;
-                componentStaticInit('./component/step.js', 
+                let steps = componentStaticRender('./component/step.js', 
                     {
                         css : './component/step.css',
-                        total : t, 
-                        current : c,
+                        total : 5, 
+                        current : 3,
                         async : true
                     }
                 );
