@@ -1,21 +1,41 @@
 function componentStaticInit(componentUrl, props = {}, callback = null) {
-    const scriptElement = document.currentScript;
-    function loadScript(url, callback) {
-        fetch(url)
-            .then(response => response.text())
-            .then(moduleCode => {
-                const module = new Function("props", moduleCode); // 동적으로 JS 실행
-                const html = module(props);
-                scriptElement.insertAdjacentHTML("beforebegin", html);
-                scriptElement.remove();
+	const scriptElement = document.currentScript;
+	const isAsync = props.async === true; // 기본값 false (동기)
 
-            // ✅ scriptElement 삭제 (이중 실행 방지)
-            // scriptElement.remove();
+	function loadSync(url) {
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', url, false);
+		xhr.send(null);
+		return xhr.responseText;
+	}
 
-            if (callback) callback();
-        } catch (err) {
-            console.error("Component loading failed:", err);
-        }
-    }
-    loadScript(componentUrl, callback);
+	function loadAsync(url, callback) {
+		fetch(url)
+			.then((response) => response.text())
+			.then((script) => callback(script))
+			.catch((error) => console.error(`Error loading ${url}:`, error));
+	}
+
+	function processComponent(scriptCode, isAsyncMode) {
+		try {
+			const module = new Function('props', scriptCode);
+			const html = module(props);
+
+			if (isAsyncMode) {
+				scriptElement.insertAdjacentHTML('beforebegin', html);
+			} else {
+				document.write(html);
+			}
+			scriptElement.remove();
+			if (callback) callback();
+		} catch (err) {
+			console.error('Component loading failed:', err);
+		}
+	}
+
+	if (isAsync) {
+		loadAsync(componentUrl, (scriptCode) => processComponent(scriptCode, true));
+	} else {
+		processComponent(loadSync(componentUrl), false);
+	}
 }
