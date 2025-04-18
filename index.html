@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="component/card.css">
     <style>
         .head {height: 56px; background-color: burlywood;}
     </style>
     <script src="./js/component.js"></script>
+    <script src="./js/componentRender.js"></script>
 </head>
 
 <body>
@@ -24,32 +26,94 @@
         </script>
 
         <div class="contents">
-            contents <br><br>
+            <div class="step"></div>
+            <button id="increment">다음 단계</button>
+            <script src="./component/step.js"></script>
 
             <script>
-                const t = 5;
-                const c = 3;
-                componentStaticInit('./component/step.js', 
-                    {
-                        css : './component/step.css',
-                        total : t, 
-                        current : c,
-                        async : true
+                // 컴포넌트 렌더링
+                const stepContainer = document.querySelector('.step');
+                const stepRoot = ComponentRender.createRoot(stepContainer, 'Step');
+                let stepState = {
+                    current: 1,
+                    total: 5,
+                    css: './component/step.css' // 추가 스타일시트가 필요한 경우
+                };
+                stepRoot.render(stepState);
+
+                // 다음 단계 버튼 클릭 이벤트
+                document.getElementById('increment').addEventListener('click', function() {
+                    if (stepState.current < stepState.total) {
+                    stepState.current++;
+                    stepRoot.update(stepState);
+                    } else {
+                    alert('마지막 단계입니다!');
                     }
-                );
+                });
         
             </script>
         </div>
 
-        <div class="input-container">
-            <label for="numberInput">숫자 입력:</label>
-            <input type="text" inputmode="none" id="numberInput" data-min="1000" data-max="100000" class="number-input" placeholder="숫자를 입력하세요" data-format="comma">
+        <div class="input-wrap" style="padding:60px 10px">
+            <div class="input-container">
+                <label for="numberInput">숫자 입력:</label>
+                <input type="text" inputmode="none" id="numberInput" data-min="1000" data-max="100000" class="number-input" placeholder="숫자를 입력하세요" data-format="comma">
+            </div>
+            
+            <div class="input-container">
+                <label for="anotherInput">다른 숫자 입력:</label>
+                <input type="text" inputmode="none" id="anotherInput" class="number-input" placeholder="숫자를 입력하세요">
+            </div>
         </div>
+
         
-        <div class="input-container">
-            <label for="anotherInput">다른 숫자 입력:</label>
-            <input type="text" inputmode="none" id="anotherInput" class="number-input" placeholder="숫자를 입력하세요">
+
+        <div class="compnent-renders">
+            <h1>단일 카드 예시</h1>
+            <div class="card"></div>
+            <button id="update-button">카드 업데이트</button>
+            
+            <h1>여러 카드 예시</h1>
+            <div class="cards-container">
+              <div class="card"></div>
+              <div class="card"></div>
+              <div class="card"></div>
+            </div>
         </div>
+        <script src="./component/card.js"></script>
+        <script>
+            // 1. 요소 선택
+            const container = document.querySelector('.card');
+            
+            // 2. 루트 생성
+            const cardRoot = createRoot(container, 'Card');
+            
+            // 3. 초기 렌더링
+            cardRoot.render({
+                title: '공지사항',
+                content: '이것은 카드의 내용입니다.',
+                buttonText: '자세히 보기',
+                onClick: (props) => {
+                    console.log('카드 버튼이 클릭되었습니다!', props);
+                }
+            });
+
+            // 4. 나중에 데이터 업데이트
+            document.getElementById('update-button').addEventListener('click', function() {
+                cardRoot.update({
+                title: '업데이트된 공지사항',
+                content: '내용이 변경되었습니다.',
+                buttonText: '확인'
+                });
+            });
+
+            // 여러 카드 한번에 렌더링
+            var cardRoots = ComponentRender.renderMultiple('.cards-container .card', 'Card', [
+                { title: '카드 1', content: '첫 번째 카드 내용' },
+                { title: '카드 2', content: '두 번째 카드 내용' },
+                { title: '카드 3', content: '세 번째 카드 내용' }
+            ]);
+        </script>
 
         <!-- 키패드 컴포넌트 로드 -->
         <script>
