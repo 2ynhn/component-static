@@ -9,6 +9,7 @@ function CardComponent(props) {
     var buttonText = props.buttonText || '자세히 보기';
     
     return `
+    <div>
       <div class="card-header">
         ${title ? `<h2 class="card-title">${title}</h2>` : ''}
       </div>
@@ -18,11 +19,13 @@ function CardComponent(props) {
         ${buttonText ? `<button class="card-button">${buttonText}</button>` : ''}
       </div>
       ${footer ? `<div class="card-footer">${footer}</div>` : ''}
+    </div>
     `;
   }
   
   // 컴포넌트가 렌더링된 후 실행될 함수 (이벤트 핸들러 등록)
   function CardAfterRender(container, props) {
+    CardBeforeDestroy(container);
     var button = container.querySelector('.card-button');
     if (button && props.onClick) {
       // 기존에 등록된 이벤트 제거를 위해 명명된 함수 사용

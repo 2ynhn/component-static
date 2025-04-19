@@ -6,9 +6,9 @@ function StepComponent(props) {
     var current = props.current || 0;
     var total = props.total || 0;
     
-    return `
-      ${css ? `<link rel="stylesheet" href="${css}">` : ''}
+    return `      
       <div class="step-comp">
+      ${css ? `<link rel="stylesheet" href="${css}">` : ''}
         <p>Your Step is...</p>
         <div class="bar">
           <span class="current">${current}</span>
@@ -20,6 +20,8 @@ function StepComponent(props) {
   
   // 컴포넌트가 렌더링된 후 실행될 함수 (이벤트 핸들러 등록)
   function StepAfterRender(container, props) {
+    StepBeforeDestroy(container);
+
     // 이벤트 핸들러 등록
     var currentElement = container.querySelector('.current');
     
