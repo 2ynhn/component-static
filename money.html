@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>금액 모션 컴포넌트</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+  <script src="./component/money-motion.js"></script>
+</head>
+<body>
+  <h1>금액 모션 컴포넌트 예제</h1>
+  
+  <div id="myMoney"></div>
+  
+  <div style="margin-top: 20px;">
+    <button id="updateButton">금액 업데이트</button>
+  </div>
+
+  <script>
+      const moneyWrap = document.querySelector('#myMoney');
+      const moneyRoot = ComponentRender.createRoot(moneyWrap, 'MoneyMotion');
+      
+      let moneyState = {
+        digits: 6,  // 자리 수
+        amount: 0   // 초기 금액은 0
+      };
+      
+      moneyRoot.render(moneyState);
+      
+      // 1초 후 금액 업데이트
+      setTimeout(function() {
+        moneyRoot.update({amount: 123000});
+      }, 1000);
+      
+      // 버튼 클릭 시 랜덤 금액으로 업데이트
+      document.getElementById('updateButton').addEventListener('click', function() {
+        const randomAmount = Math.floor(Math.random() * 1000000);
+        moneyRoot.update({amount: randomAmount});
+      });
+  </script>
+</body>
+</html>
